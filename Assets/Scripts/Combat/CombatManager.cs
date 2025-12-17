@@ -14,6 +14,7 @@ namespace MobileRPG.Combat
         
         [Header("Combat Settings")]
         public int enemyLevelScaling = 1; // Enemy level = player level + scaling
+        public float damageScaling = 10f; // Base damage multiplier for ability calculations
         
         public static CombatManager Instance { get; private set; }
         
@@ -61,8 +62,7 @@ namespace MobileRPG.Combat
             if (currentEnemy != null && player != null)
             {
                 currentEnemy.level = player.level + enemyLevelScaling;
-                // Force enemy to reinitialize with new level
-                currentEnemy.SendMessage("InitializeStats", SendMessageOptions.DontRequireReceiver);
+                currentEnemy.ResetToFullHealth();
             }
         }
         
@@ -76,7 +76,7 @@ namespace MobileRPG.Combat
             switch (ability.ability.type)
             {
                 case ScriptableObjects.AbilityType.Damage:
-                    currentEnemy.TakeDamage(ability.ability.value * (player.damage / 10f));
+                    currentEnemy.TakeDamage(ability.ability.value * (player.damage / damageScaling));
                     Debug.Log($"Player dealt {ability.ability.value} damage to enemy");
                     break;
                     
@@ -109,7 +109,7 @@ namespace MobileRPG.Combat
             switch (ability.ability.type)
             {
                 case ScriptableObjects.AbilityType.Damage:
-                    player.TakeDamage(ability.ability.value * (currentEnemy.damage / 10f));
+                    player.TakeDamage(ability.ability.value * (currentEnemy.damage / damageScaling));
                     Debug.Log($"Enemy dealt {ability.ability.value} damage to player");
                     break;
                     
@@ -170,10 +170,9 @@ namespace MobileRPG.Combat
             
             if (currentEnemy != null)
             {
-                // Reset enemy
+                // Reset enemy for new fight
+                currentEnemy.Reset();
                 ScaleEnemyToPlayer();
-                currentEnemy.gameObject.SetActive(false);
-                currentEnemy.gameObject.SetActive(true);
                 Debug.Log("New enemy spawned!");
             }
         }

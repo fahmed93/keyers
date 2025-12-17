@@ -7,6 +7,7 @@ namespace MobileRPG.UI
     /// <summary>
     /// UI display for a single ability button
     /// Shows icon, cooldown, and cast progress
+    /// Uses event-driven updates for better performance
     /// </summary>
     public class AbilityButton : MonoBehaviour
     {
@@ -18,9 +19,14 @@ namespace MobileRPG.UI
         public TextMeshProUGUI cooldownText;
         public Image backgroundImage;
         
+        [Header("Update Settings")]
+        [Tooltip("Update UI every N frames (1 = every frame, 5 = every 5 frames)")]
+        public int updateInterval = 3;
+        
         private Combat.AbilityInstance abilityInstance;
         private System.Action<int> onClickCallback;
         private int abilityIndex;
+        private int frameCounter = 0;
         
         /// <summary>
         /// Initialize the button with an ability
@@ -59,15 +65,48 @@ namespace MobileRPG.UI
             {
                 castBar.fillAmount = 0f;
             }
+            
+            // Subscribe to ability events for immediate updates
+            if (abilityInstance != null)
+            {
+                abilityInstance.OnCooldownComplete += OnCooldownComplete;
+                abilityInstance.OnCastComplete += OnCastComplete;
+                abilityInstance.OnCastInterrupted += OnCastInterrupted;
+            }
+        }
+        
+        private void OnDestroy()
+        {
+            // Unsubscribe from events
+            if (abilityInstance != null)
+            {
+                abilityInstance.OnCooldownComplete -= OnCooldownComplete;
+                abilityInstance.OnCastComplete -= OnCastComplete;
+                abilityInstance.OnCastInterrupted -= OnCastInterrupted;
+            }
         }
         
         /// <summary>
-        /// Update button visuals based on ability state
+        /// Update button visuals based on ability state (reduced frequency)
         /// </summary>
         private void Update()
         {
             if (abilityInstance == null) return;
             
+            // Only update every N frames to reduce overhead
+            frameCounter++;
+            if (frameCounter < updateInterval)
+                return;
+            
+            frameCounter = 0;
+            UpdateVisuals();
+        }
+        
+        /// <summary>
+        /// Update all visual elements
+        /// </summary>
+        private void UpdateVisuals()
+        {
             // Update cooldown overlay
             if (cooldownOverlay != null)
             {
@@ -107,6 +146,30 @@ namespace MobileRPG.UI
             {
                 button.interactable = !abilityInstance.isOnCooldown && !abilityInstance.isCasting;
             }
+        }
+        
+        /// <summary>
+        /// Event handler for when cooldown completes
+        /// </summary>
+        private void OnCooldownComplete(Combat.AbilityInstance instance)
+        {
+            UpdateVisuals();
+        }
+        
+        /// <summary>
+        /// Event handler for when cast completes
+        /// </summary>
+        private void OnCastComplete(Combat.AbilityInstance instance)
+        {
+            UpdateVisuals();
+        }
+        
+        /// <summary>
+        /// Event handler for when cast is interrupted
+        /// </summary>
+        private void OnCastInterrupted(Combat.AbilityInstance instance)
+        {
+            UpdateVisuals();
         }
         
         /// <summary>

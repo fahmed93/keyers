@@ -175,5 +175,15 @@ namespace MobileRPG.Entities
         {
             return maxHealth > 0 ? currentHealth / maxHealth : 0f;
         }
+        
+        /// <summary>
+        /// Reset entity to full health and reinitialize stats
+        /// </summary>
+        public virtual void ResetToFullHealth()
+        {
+            InitializeStats();
+            currentHealth = maxHealth;
+            isAlive = true;
+        }
     }
 }

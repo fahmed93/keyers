@@ -116,5 +116,23 @@ namespace MobileRPG.Entities
                     currentIntent = EnemyIntent.Attack;
             }
         }
+        
+        /// <summary>
+        /// Reset enemy to initial state for new combat
+        /// </summary>
+        public void Reset()
+        {
+            ResetToFullHealth();
+            aiTimer = 0f;
+            currentIntent = EnemyIntent.Attack;
+            
+            // Reset all ability cooldowns
+            foreach (var abilityInstance in GetAbilityInstances())
+            {
+                abilityInstance.cooldownRemaining = 0f;
+                abilityInstance.isCasting = false;
+                abilityInstance.castTimeRemaining = 0f;
+            }
+        }
     }
 }
