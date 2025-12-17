@@ -213,7 +213,7 @@ namespace MobileRPG.Core
             healthBarObj.transform.SetParent(canvas.transform, false);
             
             RectTransform rectTransform = healthBarObj.AddComponent<RectTransform>();
-            rectTransform.sizeDelta = new Vector2(200, 40);
+            rectTransform.sizeDelta = new Vector2(150, 25);
             
             // Position at top (left for player, right for enemy)
             rectTransform.anchorMin = new Vector2(isPlayer ? 0 : 1, 1);
@@ -236,7 +236,7 @@ namespace MobileRPG.Core
             GameObject fillObj = new GameObject("Fill");
             fillObj.transform.SetParent(healthBarObj.transform, false);
             Image fillImage = fillObj.AddComponent<Image>();
-            fillImage.color = isPlayer ? new Color(0, 1, 0, 0.8f) : new Color(1, 0, 0, 0.8f);
+            fillImage.color = isPlayer ? new Color(0, 1, 0, 1f) : new Color(1, 0, 0, 1f);
             fillImage.type = Image.Type.Filled;
             fillImage.fillMethod = Image.FillMethod.Horizontal;
             fillImage.fillAmount = 1f;
@@ -244,21 +244,21 @@ namespace MobileRPG.Core
             fillRect.anchorMin = Vector2.zero;
             fillRect.anchorMax = Vector2.one;
             fillRect.offsetMin = new Vector2(2, 2);
-            fillRect.offsetMax = new Vector2(-2, -22);
+            fillRect.offsetMax = new Vector2(-2, -2);
             
-            // Text label
+            // Text label (on top of the bar)
             GameObject textObj = new GameObject("Text");
             textObj.transform.SetParent(healthBarObj.transform, false);
             Text text = textObj.AddComponent<Text>();
-            text.text = $"{entity.currentHealth}/{entity.maxHealth}";
+            text.text = $"{entity.currentHealth:F0}/{entity.maxHealth:F0}";
             text.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
-            text.fontSize = 14;
+            text.fontSize = 12;
             text.color = Color.white;
             text.alignment = TextAnchor.MiddleCenter;
             RectTransform textRect = textObj.GetComponent<RectTransform>();
             textRect.anchorMin = Vector2.zero;
             textRect.anchorMax = Vector2.one;
-            textRect.offsetMin = new Vector2(0, -40);
+            textRect.offsetMin = Vector2.zero;
             textRect.offsetMax = Vector2.zero;
             
             Debug.Log($"Created health bar for {(isPlayer ? "Player" : "Enemy")}");
