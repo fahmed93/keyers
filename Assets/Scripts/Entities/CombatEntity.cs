@@ -41,7 +41,7 @@ namespace MobileRPG.Entities
         /// <summary>
         /// Initialize stats based on class and level
         /// </summary>
-        protected virtual void InitializeStats()
+        public virtual void InitializeStats()
         {
             if (characterClass == null) return;
             
@@ -54,7 +54,7 @@ namespace MobileRPG.Entities
         /// <summary>
         /// Initialize ability instances from character class
         /// </summary>
-        protected virtual void InitializeAbilities()
+        public virtual void InitializeAbilities()
         {
             if (characterClass == null || characterClass.abilities == null) return;
             

@@ -1,7 +1,9 @@
 {
     "name": "MobileRPG",
     "rootNamespace": "MobileRPG",
-    "references": [],
+    "references": [
+        "Unity.TextMeshPro"
+    ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,

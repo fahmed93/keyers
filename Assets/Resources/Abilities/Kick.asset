@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc5e9550dcc25384ca2344e207021b0a, type: 3}
+  m_Name: Kick
+  m_EditorClassIdentifier: 
+  abilityName: Kick
+  description: Interrupts enemy casting
+  icon: {fileID: 0}
+  type: 3
+  target: 0
+  cooldown: 6
+  castTime: 0.5
+  canBeInterrupted: 0
+  value: 0
+  duration: 0
+  buttonColor: {r: 1, g: 1, b: 0, a: 1}

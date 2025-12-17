@@ -47,9 +47,22 @@ namespace MobileRPG.Core
                 if (player == null)
                     player = playerObj.AddComponent<Entities.PlayerEntity>();
                 
+                // Add sprite renderer for visual representation
+                SpriteRenderer playerSprite = playerObj.GetComponent<SpriteRenderer>();
+                if (playerSprite == null)
+                {
+                    playerSprite = playerObj.AddComponent<SpriteRenderer>();
+                    playerSprite.sprite = Resources.Load<Sprite>("UI/Skin/UISprite");
+                    playerSprite.color = new Color(0.3f, 0.6f, 1.0f); // Blue for player
+                }
+                
                 player.characterClass = playerClass;
                 player.level = playerStartLevel;
                 playerObj.transform.position = new Vector3(-3f, 0f, 0f);
+                
+                // Manually initialize stats after assigning character class
+                player.InitializeStats();
+                player.InitializeAbilities();
                 
                 Debug.Log("Player created successfully");
             }
@@ -63,9 +76,22 @@ namespace MobileRPG.Core
                 if (enemy == null)
                     enemy = enemyObj.AddComponent<Entities.EnemyEntity>();
                 
+                // Add sprite renderer for visual representation
+                SpriteRenderer enemySprite = enemyObj.GetComponent<SpriteRenderer>();
+                if (enemySprite == null)
+                {
+                    enemySprite = enemyObj.AddComponent<SpriteRenderer>();
+                    enemySprite.sprite = Resources.Load<Sprite>("UI/Skin/UISprite");
+                    enemySprite.color = new Color(1.0f, 0.3f, 0.3f); // Red for enemy
+                }
+                
                 enemy.characterClass = enemyClass;
                 enemy.level = playerStartLevel + enemyLevelOffset;
                 enemyObj.transform.position = new Vector3(3f, 0f, 0f);
+                
+                // Manually initialize stats after assigning character class
+                enemy.InitializeStats();
+                enemy.InitializeAbilities();
                 
                 Debug.Log("Enemy created successfully");
             }
